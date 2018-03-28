@@ -7,7 +7,10 @@ public class FPS : MonoBehaviour
     public float camSens;
     public float maxVert = 45f;
     public float minVert = -45f;
-    private float gravity = 14.0f;
+    public float jumpForce = 10.0f;
+    private float gravity = 12.0f;
+    
+    private float jumpVelocity;
     public GameObject cam;
 
 
@@ -28,7 +31,20 @@ public class FPS : MonoBehaviour
         float rotateHorizontal = Input.GetAxis("Mouse X") * camSens;
         float rotateVerticle = Input.GetAxis("Mouse Y") * camSens;
 
-        Vector3 movement = new Vector3(moveHorizontal, -gravity, moveVerticle);
+        if(player.isGrounded){
+            jumpVelocity = -gravity * Time.deltaTime;
+
+            if(Input.GetKeyDown(KeyCode.Space)){
+                jumpVelocity = jumpForce;
+            }
+        }
+        else{
+            jumpVelocity -= gravity * Time.deltaTime;
+        }
+        
+
+
+        Vector3 movement = new Vector3(moveHorizontal, jumpVelocity, moveVerticle);
 
         transform.Rotate(0, rotateHorizontal, 0);
 
